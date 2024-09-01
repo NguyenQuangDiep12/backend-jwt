@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.np.shopee.model.Product;
 import com.np.shopee.request.AddProductRequest;
+import com.np.shopee.request.ProductUpdateRequest;
 
 public interface IProductService {
-    void addProduct(AddProductRequest product);
+    Product addProduct(AddProductRequest product);
 
     List<Product> getAllProducts();
 
@@ -26,6 +27,6 @@ public interface IProductService {
 
     void deleteProductById(Long id);
 
-    void updateProduct(Product product, Long productId);
+    Product updateProduct(ProductUpdateRequest request, Long productId);
 
 }

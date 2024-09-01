@@ -1,13 +1,17 @@
 package com.np.shopee.service.product;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.np.shopee.exception.ProductNotFoundException;
+import com.np.shopee.model.Category;
 import com.np.shopee.model.Product;
+import com.np.shopee.repository.CategoryRepository;
 import com.np.shopee.repository.ProductRepository;
 import com.np.shopee.request.AddProductRequest;
+import com.np.shopee.request.ProductUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,10 +20,49 @@ import lombok.RequiredArgsConstructor;
 public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+
+    // addProduct
+    @Override
+    public Product addProduct(AddProductRequest request) {
+        // check if the category is found in the DB
+        // If Yes , set it as the new product category
+        // If No , the save it as a new category
+        // the set as the new product category
+        // Optional
+        Category category = Optional.ofNullable(categoryRepository.findByname(request.getName()))
+                .orElseGet(() -> {
+                    Category newCategory = new Category(request.getCategory().getName());
+                    return categoryRepository.save(newCategory);
+                });
+        request.setCategory(category);
+        return productRepository.save(createProduct(request, category));
+    }
+
+    private Product createProduct(AddProductRequest request, Category category) {
+        return new Product(
+                request.getName(), request.getBrand(), request.getDescription(), request.getPrice(),
+                request.getInventory(), category);
+    }
 
     @Override
-    public void addProduct(AddProductRequest request) {
+    public Product updateProduct(ProductUpdateRequest request, Long productId) {
+        return productRepository.findById(productId)
+                .map(existingProduct -> updateExistingProduct(existingProduct, request))
+                .map(productRepository::save)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found!"));
+    }
 
+    private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
+        existingProduct.setName(request.getName());
+        existingProduct.setBrand(request.getBrand());
+        existingProduct.setDescription(request.getDescription());
+        existingProduct.setCategory(request.getCategory());
+        existingProduct.setInventory(request.getInventory());
+        existingProduct.setPrice(request.getPrice());
+        Category category = categoryRepository.findByname(request.getCategory().getName());
+        existingProduct.setCategory(category);
+        return existingProduct;
     }
 
     @Override
@@ -69,12 +112,6 @@ public class ProductService implements IProductService {
                 .ifPresentOrElse(productRepository::delete, () -> {
                     throw new ProductNotFoundException("Product not found! ");
                 });
-    }
-
-    @Override
-    public void updateProduct(Product product, Long productId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProduct'");
     }
 
 }
