@@ -19,6 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
