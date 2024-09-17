@@ -3,12 +3,17 @@ package com.np.shopee.service.product;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.np.shopee.dto.ImageDto;
+import com.np.shopee.dto.ProductDto;
 import com.np.shopee.exception.ProductNotFoundException;
 import com.np.shopee.model.Category;
+import com.np.shopee.model.Image;
 import com.np.shopee.model.Product;
 import com.np.shopee.repository.CategoryRepository;
+import com.np.shopee.repository.ImageRepository;
 import com.np.shopee.repository.ProductRepository;
 import com.np.shopee.request.AddProductRequest;
 import com.np.shopee.request.ProductUpdateRequest;
@@ -21,6 +26,8 @@ public class ProductService implements IProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
+    private final ModelMapper modelMapper;
 
     // addProduct
     @Override
@@ -112,6 +119,27 @@ public class ProductService implements IProductService {
                 .ifPresentOrElse(productRepository::delete, () -> {
                     throw new ProductNotFoundException("Product not found! ");
                 });
+    }
+
+    @Override
+    public List<ProductDto> getConvertProducts(List<Product> products) {
+        return products
+                .stream()
+                .map(product -> convertToDto(product))
+                .toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images
+                .stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 
 }
