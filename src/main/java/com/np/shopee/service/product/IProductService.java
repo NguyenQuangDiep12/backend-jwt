@@ -2,6 +2,7 @@ package com.np.shopee.service.product;
 
 import java.util.List;
 
+import com.np.shopee.dto.ProductDto;
 import com.np.shopee.model.Product;
 import com.np.shopee.request.AddProductRequest;
 import com.np.shopee.request.ProductUpdateRequest;
@@ -29,4 +30,7 @@ public interface IProductService {
 
     Product updateProduct(ProductUpdateRequest request, Long productId);
 
+    ProductDto convertToDto(Product product);
+
+    List<ProductDto> getConvertProducts(List<Product> products);
 }

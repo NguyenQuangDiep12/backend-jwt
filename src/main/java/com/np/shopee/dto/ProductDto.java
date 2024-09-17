@@ -1,13 +1,15 @@
-package com.np.shopee.request;
+package com.np.shopee.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.np.shopee.model.Category;
 
 import lombok.Data;
 
 @Data
-public class AddProductRequest {
+public class ProductDto {
+
     private Long id;
     private String name;
     private String brand;
@@ -16,4 +18,6 @@ public class AddProductRequest {
     private int inventory;
 
     private Category category;
+
+    private List<ImageDto> images;
 }
