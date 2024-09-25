@@ -28,6 +28,15 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<!-- ma hoa ki tu cho ma nguon -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--Ma hoa cac bao cao duoc tao ra boi plugin cua maven-->
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<log4j.version>1.2.17</log4j.version>
+
+		<jcl.slf4j.version>1.7.12</jcl.slf4j.version>
+
 	</properties>
 	<dependencies>
 
@@ -70,6 +79,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -82,6 +99,10 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+						</exclude>
+						<exclude>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-devtools</artifactId>
 						</exclude>
 					</excludes>
 				</configuration>
