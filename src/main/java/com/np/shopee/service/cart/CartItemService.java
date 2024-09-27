@@ -1,6 +1,7 @@
 package com.np.shopee.service.cart;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import org.springframework.stereotype.Service;
 
@@ -24,17 +25,17 @@ public class CartItemService implements ICartItemService {
     private final ICartService cartService;
 
     @Override
-    public void addItemToCart(Long cardId, Long ProductId, int quantity) {
+    public void addItemToCart(Long cardId, Long productId, int quantity) {
         // 1. Get the cart
         // 2. Get the product
         // 3. Check if the product already in the cart
         // 4. if yes, then increase the quantity with the requested quantity
         // 5. if no , the initiate a new cartItem entry
         Cart cart = cartService.getCartById(cardId);
-        Product product = productService.getProductById(ProductId);
+        Product product = productService.getProductById(productId);
         CartItem cartItem = cart.getItems()
                 .stream()
-                .filter(item -> item.getProduct().getId().equals(product))
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst().orElse(new CartItem());
 
         if (cartItem.getId() == null) {
@@ -77,6 +78,7 @@ public class CartItemService implements ICartItemService {
         cartRepsitory.save(cart);
     }
 
+    @Override
     public CartItem getCartItem(Long cartId, Long productId) {
         Cart cart = cartService.getCartById(cartId);
         return cart.getItems()
