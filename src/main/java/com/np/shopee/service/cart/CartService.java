@@ -32,7 +32,7 @@ public class CartService implements ICartService {
 
     }
 
-    @Transactional
+    @Transactional // xu ly nhieu ham
     @Override
     public void clearCart(Long id) {
         Cart cart = getCartById(id);
