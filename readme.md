@@ -4,6 +4,3 @@
 
 # Project Title
 
-Here is an example of an image in the README:
-
-![Project Screenshot](./images/project.png)
