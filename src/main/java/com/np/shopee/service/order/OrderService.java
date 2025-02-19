@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.np.shopee.dto.OrderDto;
 import com.np.shopee.enums.OrderStatus;
 import com.np.shopee.exception.ResourceNotFoundException;
 import com.np.shopee.model.Cart;
@@ -27,6 +29,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CartService cartService;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override
@@ -83,4 +86,7 @@ public class OrderService implements IOrderService {
         return orderRepository.findByUserId(userId);
     }
 
+    private OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
+    }
 }
